@@ -1,0 +1,4 @@
+out.png
+.cabal-sandbox
+cabal.sandbox.config
+dist
