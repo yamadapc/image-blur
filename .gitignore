@@ -2,3 +2,4 @@ out.png
 .cabal-sandbox
 cabal.sandbox.config
 dist
+image-blur
