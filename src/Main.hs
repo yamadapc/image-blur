@@ -3,8 +3,9 @@ module Main
 
 import Control.Monad (void)
 import Data.Monoid
-import qualified Data.Vector.Storable as VS (foldr)
-import Vision.Image
+import qualified Data.Vector.Storable as VS (Storable, Vector, concat,
+                                             unsafeSlice, foldr,)
+import Vision.Image hiding (map)
 import Vision.Primitive
 
 main :: IO ()
@@ -15,18 +16,34 @@ main = do
         Right i -> let i' = myBlur (convert i)
           in void $ save "out.png" i'
 
--- For the record, `minBound` is from the `Prelude.Bounded` type-class.
-
 myBlur :: RGB -> RGB
 myBlur i = mapWithPoint fn i
   where
-    maxX = let (Z :. _ :. x) = shape i
-             in x
-    fn (Z :. y :. x, _) = if x' < maxX
-        then i `index` (Z :. y :. x')
+    (Z :. maxY :. maxX) = shape i
+    vec = manifestVector i
+    fn (Z :. y :. x, _) = if inBounds
+        --then i `index` (Z :. y :. x')
+        then average (dim * dim) $ subsection maxX vec y' x' dim
         else RGBPixel maxBound maxBound maxBound
       where
-        x' = x + 10
+        x' = x - dim `div` 2
+        y' = y - dim `div` 2
+        -- vec =  V.fromList (replicate 9 0)
+        dim = 20
+        inBounds = x' >= 0 && y' >= 0 && x' < maxX - dim && y' < maxY - dim
+
+-- $setup
+-- >>> import qualified Data.Vector.Storable as VS (fromList)
+
+-- |
+-- Calculates a subsection of a vector, given a size and a position
+--
+-- >>> subsection 10 (VS.fromList [0..100]) 0 0 3 :: VS.Vector Int
+-- fromList [0,1,2,10,11,12,20,21,22]
+subsection :: VS.Storable a => Int -> VS.Vector a -> Int -> Int -> Int -> VS.Vector a
+subsection w v y x dim = VS.concat $ map lineSlice [y..y+dim-1]
+  where
+    lineSlice y' = let start = x + y'*w in VS.unsafeSlice start dim v
 
 mapWithPoint :: (Image i1, FromFunction i2)
              => ((Point, ImagePixel i1) -> FromFunctionPixel i2)
@@ -34,16 +51,20 @@ mapWithPoint :: (Image i1, FromFunction i2)
              -> i2
 mapWithPoint fn img = fromFunction (shape img) $ \p -> fn (p, img `index` p)
 
-average :: RGB -> RGBPixel
-average i = VS.foldr (<>) mempty vec `divideRGB` fromIntegral len
-  where
-    vec = manifestVector i
-    len = let (Z :. y :. x) = shape i in y * x
 
-    divideRGB (RGBPixel r g b) l = RGBPixel (r `div` l) (g `div` l) (b `div` l)
-
-instance Monoid RGBPixel
+-- |
+-- Calculates the average pixel in a subsection
+--
+-- >>> average 9 (VS.fromList )
+average :: Int -> VS.Vector RGBPixel -> RGBPixel
+average len vec = divideRGB (VS.foldr helper (0, 0, 0) vec )
   where
-    mappend (RGBPixel r1 g1 b1) (RGBPixel r2 g2 b2) =
-        RGBPixel (r1 + r2) (g1 + g2) (b1 + b2)
-    mempty = RGBPixel 0 0 0
+    divideRGB :: (Int, Int, Int) -> RGBPixel
+    divideRGB (r, g, b) = RGBPixel (fromIntegral (r `div` len))
+                                   (fromIntegral (g `div` len))
+                                   (fromIntegral (b `div` len))
+
+    helper :: RGBPixel -> (Int, Int, Int) -> (Int, Int, Int)
+    helper (RGBPixel r g b) (r', g', b') = ( r' + fromIntegral r
+                                           , g' + fromIntegral g
+                                           , b' + fromIntegral b)
