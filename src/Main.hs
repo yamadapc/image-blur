@@ -3,8 +3,9 @@ module Main
 
 import Control.Monad (void)
 import Data.Monoid
-import qualified Data.Vector.Storable as VS (Storable, Vector, map,
-                                             unsafeSlice, foldr,)
+import qualified Data.Vector as V (Vector, ifoldl', fromList)
+import qualified Data.Vector.Storable as VS (Storable, Vector, (!), convert, imap, map,
+                                             unsafeSlice, foldr)
 import System.Environment (getArgs)
 import Vision.Image hiding (map)
 import Vision.Primitive
@@ -34,6 +35,35 @@ myBlur i = mapWithPoint fn i
         dim = 20
         inBounds = x' >= 0 && y' >= 0 && x' < maxX - dim && y' < maxY - dim
 
+-- |
+-- >>> sumTable 3 (VS.fromList (replicate (RGBPixel 1 1 1) 5)) :: VS.Vector RGBPixel
+sumTable :: Int -> VS.Vector RGBPixel -> V.Vector (Int, Int, Int)
+sumTable width vec = V.fromList $ reverse $ V.ifoldl' helper [] (VS.convert vec)
+  where
+    helper :: [(Int, Int, Int)] -> Int -> RGBPixel -> [(Int, Int, Int)]
+    helper m i px = let a = toTup px
+                        b = toSum left
+                        c = toSum above
+                        d = toSum $ negateTup diag
+                      in get (a <> b <> c <> d) : m
+      where
+        left  = if i `mod` width >= 1
+            then head m
+            else (0, 0, 0)
+
+        above = if i >= width
+            then m !! (width - 1)
+            else (0, 0, 0)
+
+        diag = if i >= width && i `mod` width >= 1
+            then m !! width
+            else (0, 0, 0)
+
+        get (x, y, z) = (getSum x, getSum y, getSum z)
+        toSum (x, y, z) = (Sum x, Sum y, Sum z)
+        toTup (RGBPixel r g b) = (fromIntegral r, fromIntegral g, fromIntegral b)
+        negateTup (x, y, z) = (-x, -y, -z)
+
 -- $setup
 -- >>> import qualified Data.Vector.Storable as VS (fromList)
 
@@ -54,7 +84,7 @@ subsectionAverage w v y x dim =
 --
 -- >>> average 9 (VS.fromList )
 average :: Int -> VS.Vector RGBPixel -> RGBPixel
-average len vec = divideRGB len (VS.foldr sumRGB (0, 0, 0) vec )
+average len vec = divideRGB len (VS.foldr sumRGB (0, 0, 0) vec)
 
 divideRGB :: Int -> (Int, Int, Int) -> RGBPixel
 divideRGB len (r, g, b) = RGBPixel (fromIntegral (r `div` len))
@@ -62,9 +92,9 @@ divideRGB len (r, g, b) = RGBPixel (fromIntegral (r `div` len))
                                    (fromIntegral (b `div` len))
 
 sumRGB :: RGBPixel -> (Int, Int, Int) -> (Int, Int, Int)
-sumRGB (RGBPixel r g b) (r', g', b') = ( r' + fromIntegral r
-                                       , g' + fromIntegral g
-                                       , b' + fromIntegral b)
+sumRGB (RGBPixel r g b) (r', g', b') = (r' + fromIntegral r,
+                                        g' + fromIntegral g,
+                                        b' + fromIntegral b)
 
 mapWithPoint :: (Image i1, FromFunction i2)
              => ((Point, ImagePixel i1) -> FromFunctionPixel i2)
