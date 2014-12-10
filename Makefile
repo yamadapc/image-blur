@@ -3,7 +3,7 @@ default: image-blur
 profile: dependencies
 	cabal configure --enable-library-profiling --enable-executable-profiling --ghc-option=-auto-all --ghc-option=-rtsopts
 	cabal build
-	./dist/build/image-blur/image-blur +RTS -p -RTS input.png output.png
+	./dist/build/image-blur/image-blur +RTS -p -RTS input-medium.jpg output.png
 
 image-blur: configure dependencies src/Main.hs
 	cabal build
