@@ -3,15 +3,11 @@ module Main
   where
 
 import Control.Monad (void)
-import Data.Monoid
 import qualified Data.Vector as V -- (Vector, (!), ifoldl', fromList)
-import qualified Data.Vector.Storable as VS (Storable, Vector, (!), convert, imap, map,
-                                             unsafeSlice, foldr)
+import qualified Data.Vector.Storable as VS (Vector, convert)
 import System.Environment (getArgs)
 import Vision.Image hiding (map)
 import Vision.Primitive
-
-import Debug.Trace (trace)
 
 main :: IO ()
 main = do
@@ -46,10 +42,10 @@ sumTable width vec = iconstructFoldN helper (VS.convert vec)
   where
     helper :: V.Vector (Int, Int, Int) -> Int -> RGBPixel -> (Int, Int, Int)
     helper m i px = let a = toTup px
-                        b = toSum left
-                        c = toSum above
-                        d = toSum $ negateTup diag
-                      in get (a <> b <> c <> d)
+                        b = left
+                        c = above
+                        d = diag
+                      in a + b + c - d
       where
         left = if i `mod` width >= 1
             then m V.! (i - 1)
@@ -63,10 +59,7 @@ sumTable width vec = iconstructFoldN helper (VS.convert vec)
             then m V.! (i - width - 1)
             else (0, 0, 0)
 
-        get (x, y, z) = (getSum x, getSum y, getSum z)
-        toSum (x, y, z) = (Sum x, Sum y, Sum z)
         toTup (RGBPixel r g b) = (fromIntegral r, fromIntegral g, fromIntegral b)
-        negateTup (x, y, z) = (-x, -y, -z)
 
 -- $setup
 -- >>> import qualified Data.Vector.Storable as VS (fromList)

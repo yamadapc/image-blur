@@ -1,3 +1,5 @@
+OS := $(shell uname)
+
 default: image-blur
 
 profile: dependencies
@@ -9,7 +11,13 @@ image-blur: configure dependencies src/Main.hs
 	cabal build
 
 dependencies: image-blur.cabal
-	cabal install --only-dep -j4
+	cabal sandbox init
+ifeq ($(OS),Darwin)
+	cabal install friday --enable-library-profiling \
+		--extra-include-dirs=$(shell brew --prefix)/include \
+		--extra-lib-dirs=$(shell brew --prefix)/lib
+endif
+	cabal install --enable-library-profiling --only-dep -j4
 
 configure: image-blur.cabal
 	cabal configure

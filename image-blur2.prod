@@ -1,0 +1,97 @@
+	Tue Dec  9 22:23 2014 Time and Allocation Profiling Report  (Final)
+
+	   image-blur +RTS -p -RTS input-medium.jpg output.png
+
+	total time  =        0.69 secs   (695 ticks @ 1000 us, 1 processor)
+	total alloc = 713,802,296 bytes  (excludes profiling overheads)
+
+COST CENTRE            MODULE  %time %alloc
+
+myBlur.fn              Main     35.1    4.2
+subsectionAverage      Main     15.5   12.7
+iconstructFoldN.helper Main     13.1   29.1
+-                      Main      5.3   12.7
+sumTable               Main      5.0   10.8
+mapWithPoint           Main      4.6    2.6
+rgbDiv                 Main      4.2    0.0
+sumTable.helper        Main      4.0    6.5
+sumTable.helper.a      Main      2.6    0.0
+iconstructFoldN        Main      2.6   15.1
+main                   Main      2.4    0.0
+sumTable.helper.toTup  Main      1.7    6.5
+subsectionAverage.c    Main      1.4    0.0
+
+
+                                                                           individual     inherited
+COST CENTRE                      MODULE                  no.     entries  %time %alloc   %time %alloc
+
+MAIN                             MAIN                     73           0    0.0    0.0   100.0  100.0
+ main                            Main                    147           0    2.4    0.0   100.0  100.0
+  main.i'                        Main                    148           1    0.0    0.0    97.6  100.0
+   myBlur                        Main                    149           1    0.0    0.0    97.6  100.0
+    myBlur.table                 Main                    170           1    0.0    0.0    29.1   67.8
+     sumTable                    Main                    171           1    5.0   10.8    29.1   67.8
+      iconstructFoldN            Main                    172           1    2.6   15.1    24.0   57.0
+       iconstructFoldN.helper    Main                    177      960000   13.1   29.1    21.4   42.0
+        sumTable.helper.get      Main                    197      960000    0.0    0.0     0.0    0.0
+        sumTable.helper          Main                    181      960000    4.0    6.5     8.3   12.9
+         sumTable.helper.a       Main                    204           0    2.6    0.0     4.3    6.5
+          sumTable.helper.toTup  Main                    205           0    1.7    6.5     1.7    6.5
+        sumTable.helper.a        Main                    180      960000    0.0    0.0     0.0    0.0
+        sumTable.helper.toTup    Main                    179      960000    0.0    0.0     0.0    0.0
+        iconstructFoldN.helper.i Main                    178      960000    0.0    0.0     0.0    0.0
+       iconstructFoldN.len       Main                    173           1    0.0    0.0     0.0    0.0
+    myBlur.vec                   Main                    169           1    0.0    0.0     0.0    0.0
+    myBlur.maxY                  Main                    168           1    0.0    0.0     0.0    0.0
+    myBlur.(...)                 Main                    167           1    0.0    0.0     0.0    0.0
+    myBlur.maxX                  Main                    166           1    0.0    0.0     0.0    0.0
+    myBlur.fn                    Main                    164           0    0.0    0.0     0.0    0.0
+     myBlur.fn.inBounds          Main                    165           0    0.0    0.0     0.0    0.0
+    mapWithPoint                 Main                    150           1    4.6    2.6    68.5   32.2
+     myBlur.fn.x'                Main                    154      960000    0.0    0.0     0.0    0.0
+     myBlur.fn.inBounds          Main                    153      960000    0.0    0.0     0.0    0.0
+     mapWithPoint.\              Main                    152      960000    0.4    0.0    63.9   29.6
+      myBlur.fn                  Main                    159           0   35.1    4.2    63.5   29.6
+       rgbDiv                    Main                    209      944649    0.0    0.0     0.0    0.0
+       +                         Main                    208      944649    0.0    0.0     0.0    0.0
+       subsectionAverage.a       Main                    206      944649    0.0    0.0     0.0    0.0
+       subsectionAverage.b       Main                    201      944649    0.0    0.0     0.0    0.0
+       -                         Main                    200     1889298    0.0    0.0     0.0    0.0
+       subsectionAverage.d       Main                    198      944649    0.0    0.0     0.0    0.0
+       subsectionAverage         Main                    175      944649   15.5   12.7    28.3   25.4
+        rgbDiv                   Main                    211           0    4.2    0.0     4.2    0.0
+        subsectionAverage.a      Main                    207           0    0.1    0.0     0.1    0.0
+        -                        Main                    203           0    5.3   12.7     5.3   12.7
+        subsectionAverage.b      Main                    202           0    0.9    0.0     0.9    0.0
+        subsectionAverage.d      Main                    199           0    0.9    0.0     0.9    0.0
+        subsectionAverage.c      Main                    176           0    1.4    0.0     1.4    0.0
+       subsectionAverage.c       Main                    174      944649    0.0    0.0     0.0    0.0
+       myBlur.fn.y'              Main                    162      958200    0.0    0.0     0.0    0.0
+     myBlur.fn                   Main                    151      960000    0.0    0.0     0.0    0.0
+ CAF                             Main                    145           0    0.0    0.0     0.0    0.0
+  sumTable                       Main                    182           0    0.0    0.0     0.0    0.0
+   sumTable.helper               Main                    183           0    0.0    0.0     0.0    0.0
+    sumTable.helper.diag         Main                    194           1    0.0    0.0     0.0    0.0
+     fromInteger                 Main                    195           1    0.0    0.0     0.0    0.0
+    sumTable.helper.above        Main                    191           1    0.0    0.0     0.0    0.0
+     fromInteger                 Main                    192           1    0.0    0.0     0.0    0.0
+    sumTable.helper.d            Main                    189           1    0.0    0.0     0.0    0.0
+     sumTable.helper.toSum       Main                    196           1    0.0    0.0     0.0    0.0
+     sumTable.helper.negateTup   Main                    193           1    0.0    0.0     0.0    0.0
+    sumTable.helper.c            Main                    188           1    0.0    0.0     0.0    0.0
+     sumTable.helper.toSum       Main                    190           1    0.0    0.0     0.0    0.0
+    sumTable.helper.left         Main                    186           1    0.0    0.0     0.0    0.0
+     fromInteger                 Main                    187           1    0.0    0.0     0.0    0.0
+    sumTable.helper.b            Main                    184           1    0.0    0.0     0.0    0.0
+     sumTable.helper.toSum       Main                    185           1    0.0    0.0     0.0    0.0
+  myBlur                         Main                    155           0    0.0    0.0     0.0    0.0
+   myBlur.fn                     Main                    156           0    0.0    0.0     0.0    0.0
+    myBlur.fn.y'                 Main                    163           0    0.0    0.0     0.0    0.0
+    myBlur.fn.dim                Main                    158           1    0.0    0.0     0.0    0.0
+    myBlur.fn.x'                 Main                    157           0    0.0    0.0     0.0    0.0
+  main                           Main                    146           1    0.0    0.0     0.0    0.0
+ CAF                             Vision.Image.Storage    141           0    0.0    0.0     0.0    0.0
+ CAF                             GHC.Conc.Signal         115           0    0.0    0.0     0.0    0.0
+ CAF                             GHC.IO.Encoding         108           0    0.0    0.0     0.0    0.0
+ CAF                             GHC.IO.Encoding.Iconv   106           0    0.0    0.0     0.0    0.0
+ CAF                             GHC.IO.Handle.FD         99           0    0.0    0.0     0.0    0.0

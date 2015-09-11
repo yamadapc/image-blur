@@ -1,0 +1,87 @@
+	Sun Dec 14 01:58 2014 Time and Allocation Profiling Report  (Final)
+
+	   image-blur +RTS -p -RTS input-medium.jpg output.png
+
+	total time  =        0.99 secs   (987 ticks @ 1000 us, 1 processor)
+	total alloc = 967,011,080 bytes  (excludes profiling overheads)
+
+COST CENTRE            MODULE  %time %alloc
+
+myBlur.fn              Main     26.0    3.1
+sumTable.helper        Main     21.1   34.1
+subsectionAverage      Main     13.1    9.4
++                      Main      7.1    9.5
+-                      Main      6.2   14.1
+mapWithPoint           Main      4.3    1.9
+iconstructFoldN.helper Main      4.2    8.7
+sumTable               Main      3.7    7.9
+rgbDiv                 Main      3.2    0.0
+main                   Main      2.5    0.0
+iconstructFoldN        Main      2.4   11.1
+sumTable.helper.left   Main      1.3    0.0
+sumTable.helper.a      Main      1.2    0.0
+
+
+                                                                           individual     inherited
+COST CENTRE                      MODULE                  no.     entries  %time %alloc   %time %alloc
+
+MAIN                             MAIN                     73           0    0.0    0.0   100.0  100.0
+ main                            Main                    147           0    2.5    0.0   100.0  100.0
+  main.i'                        Main                    148           1    0.0    0.0    97.5  100.0
+   myBlur                        Main                    149           1    0.0    0.0    97.5  100.0
+    myBlur.table                 Main                    170           1    0.0    0.0    44.6   76.2
+     sumTable                    Main                    171           1    3.7    7.9    44.6   76.2
+      iconstructFoldN            Main                    172           1    2.4   11.1    40.8   68.3
+       iconstructFoldN.helper    Main                    177      960000    4.2    8.7    38.4   57.2
+        iconstructFoldN.helper.i Main                    181      960000    0.0    0.0     0.0    0.0
+        sumTable.helper          Main                    178      960000   21.1   34.1    34.2   48.4
+         -                       Main                    189      960000    2.0    4.8     2.0    4.8
+         sumTable.helper.diag    Main                    188      960000    0.9    0.0     0.9    0.0
+         sumTable.helper.d       Main                    187      960000    0.0    0.0     0.0    0.0
+         sumTable.helper.above   Main                    186      960000    0.6    0.0     0.6    0.0
+         sumTable.helper.c       Main                    185      960000    0.0    0.0     0.0    0.0
+         +                       Main                    184     1920000    7.1    9.5     7.1    9.5
+         sumTable.helper.left    Main                    183      960000    1.3    0.0     1.3    0.0
+         sumTable.helper.b       Main                    182      960000    0.0    0.0     0.0    0.0
+         sumTable.helper.a       Main                    180      960000    1.2    0.0     1.2    0.0
+         sumTable.helper.toTup   Main                    179      960000    0.0    0.0     0.0    0.0
+       iconstructFoldN.len       Main                    173           1    0.0    0.0     0.0    0.0
+    myBlur.vec                   Main                    169           1    0.0    0.0     0.0    0.0
+    myBlur.maxY                  Main                    168           1    0.0    0.0     0.0    0.0
+    myBlur.(...)                 Main                    167           1    0.0    0.0     0.0    0.0
+    myBlur.maxX                  Main                    166           1    0.0    0.0     0.0    0.0
+    myBlur.fn                    Main                    164           0    0.0    0.0     0.0    0.0
+     myBlur.fn.inBounds          Main                    165           0    0.0    0.0     0.0    0.0
+    mapWithPoint                 Main                    150           1    4.3    1.9    52.9   23.8
+     myBlur.fn.x'                Main                    154      960000    0.0    0.0     0.0    0.0
+     myBlur.fn.inBounds          Main                    153      960000    0.0    0.0     0.0    0.0
+     mapWithPoint.\              Main                    152      960000    0.3    0.0    48.6   21.9
+      myBlur.fn                  Main                    159           0   26.0    3.1    48.3   21.9
+       rgbDiv                    Main                    200      944649    0.0    0.0     0.0    0.0
+       +                         Main                    199      944649    0.0    0.0     0.0    0.0
+       subsectionAverage.a       Main                    197      944649    0.0    0.0     0.0    0.0
+       subsectionAverage.b       Main                    193      944649    0.0    0.0     0.0    0.0
+       -                         Main                    192     1889298    0.0    0.0     0.0    0.0
+       subsectionAverage.d       Main                    190      944649    0.0    0.0     0.0    0.0
+       subsectionAverage         Main                    175      944649   13.1    9.4    22.3   18.8
+        rgbDiv                   Main                    202           0    3.2    0.0     3.2    0.0
+        subsectionAverage.a      Main                    198           0    0.2    0.0     0.2    0.0
+        -                        Main                    195           0    4.2    9.4     4.2    9.4
+        subsectionAverage.b      Main                    194           0    0.2    0.0     0.2    0.0
+        subsectionAverage.d      Main                    191           0    0.7    0.0     0.7    0.0
+        subsectionAverage.c      Main                    176           0    0.7    0.0     0.7    0.0
+       subsectionAverage.c       Main                    174      944649    0.0    0.0     0.0    0.0
+       myBlur.fn.y'              Main                    162      958200    0.0    0.0     0.0    0.0
+     myBlur.fn                   Main                    151      960000    0.0    0.0     0.0    0.0
+ CAF                             Main                    145           0    0.0    0.0     0.0    0.0
+  myBlur                         Main                    155           0    0.0    0.0     0.0    0.0
+   myBlur.fn                     Main                    156           0    0.0    0.0     0.0    0.0
+    myBlur.fn.y'                 Main                    163           0    0.0    0.0     0.0    0.0
+    myBlur.fn.dim                Main                    158           1    0.0    0.0     0.0    0.0
+    myBlur.fn.x'                 Main                    157           0    0.0    0.0     0.0    0.0
+  main                           Main                    146           1    0.0    0.0     0.0    0.0
+ CAF                             Vision.Image.Storage    141           0    0.0    0.0     0.0    0.0
+ CAF                             GHC.Conc.Signal         115           0    0.0    0.0     0.0    0.0
+ CAF                             GHC.IO.Encoding         108           0    0.0    0.0     0.0    0.0
+ CAF                             GHC.IO.Encoding.Iconv   106           0    0.0    0.0     0.0    0.0
+ CAF                             GHC.IO.Handle.FD         99           0    0.0    0.0     0.0    0.0
